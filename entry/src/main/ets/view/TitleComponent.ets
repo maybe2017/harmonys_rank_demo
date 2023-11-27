@@ -11,6 +11,7 @@ export default struct TitleComponent {
   build() {
     Row() {
       Row() {
+
         Image($r('app.media.ic_public_back'))
           .height(TitleBarStyle.IMAGE_BACK_SIZE)
           .width(TitleBarStyle.IMAGE_BACK_SIZE)

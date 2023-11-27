@@ -1,5 +1,7 @@
 {
   "src": [
-    "pages/RankPageComponent"
+    "pages/Index",
+    "pages/RankPageComponent",
+    "pages/TOTOList"
   ]
 }

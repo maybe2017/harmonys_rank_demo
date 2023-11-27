@@ -53,10 +53,10 @@ struct RankPageComponent {
                 refreshDataSource: this.refreshDataSource
               })
             }
-          }, (item: RankVoteInfo) => JSON.stringify(item))
+          }, (item: RankVoteInfo) => item.id)
       }
-      .width(WEIGHT)
-      .height(Style.LIST_HEIGHT)
+      .width('100%')
+      .height('65%')
       .divider({ strokeWidth: Style.STROKE_WIDTH })
     }
     .padding({
@@ -68,8 +68,5 @@ struct RankPageComponent {
     .alignItems(HorizontalAlign.Center)
     .backgroundColor(Color.White)
   }
-
-
-
 }
 

@@ -12,16 +12,18 @@ export default struct ListItemComponent {
   // ui
   build() {
     Row() {
-      Text(this.name)
-        .width(500)
+      Text(this.index + "")
         .fontSize(FontStyle.Normal);
+      Text(this.name)
+        .fontSize(FontStyle.Normal)
+        .margin({right: 20})
       Text(this.vote)
-        .width(500)
         .fontSize(FontStyle.Normal);
     }
     .height(20)
-    .width(600)
-    .onClick(()=> this.isChange = !this.isChange);
+    .width(200)
+    .onClick(()=> this.isChange = !this.isChange)
+    .justifyContent(FlexAlign.SpaceBetween)
   }
 
   // 渲染排名样式

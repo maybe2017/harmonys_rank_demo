@@ -206,6 +206,7 @@ class titleBarStyle {
   IMAGE_BACK_SIZE: number = 21;
   IMAGE_BACK_MARGIN_RIGHT: number = 18;
   IMAGE_LOADING_SIZE: number = 22;
+
   BAR_HEIGHT: number = 47;
   BAR_MARGIN_HORIZONTAL: number = 26;
   BAR_MARGIN_TOP: number = 10;
