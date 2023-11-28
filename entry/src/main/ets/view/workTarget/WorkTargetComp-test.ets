@@ -7,70 +7,67 @@ export default struct WorkTargetComponent {
 
   // ui
   build() {
+    // Flex组件默认在主轴方向，在其父容器内自动拉升
     Column() {
-      Column({ space: 20 }) {
-        Text("工作目标")
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .margin({ top: 10, bottom: 10, left: 12 })
+      Flex({ direction: FlexDirection.Column }) {
+        Text("AAA")
+          .backgroundColor(Color.Red)
+        .flexGrow(1)
 
-        // 一列2行
-        Column() {
-          Row() {
-            Image($r('app.media.icon'))
-              .height(80)
-              .width(80)
-              .margin(10)
-            Column({ space: 7 }) {
-              Text("第一季度运营目标")
-                .fontSize(18)
-                .fontWeight(FontWeight.Bold)
-              Text("实现用户量与用户活跃度提升。")
-                .fontSize(15)
-                .fontColor(Color.Gray)
-                .fontWeight(FontWeight.Medium)
-                .opacity(0.5)
-            }.alignItems(HorizontalAlign.Start)
-          }
-
-          // 默认row方向排列子组件
-          Flex({ justifyContent: FlexAlign.SpaceBetween }) {
-            Column({ space: 5 }) {
-              Text("整体进度")
-                .fontSize(18)
-                .fontWeight(FontWeight.Bold)
-              Text("更新时间: " + this.getUpdateTimeStr(this.updateTime))
-                .fontSize(15)
-                .fontColor(Color.Gray)
-                .fontWeight(FontWeight.Medium)
-                .opacity(0.5)
-            }.alignItems(HorizontalAlign.Start)
-            Stack() {
-              Image($r('app.media.loading')).width(40)
-              Text(this.completedCount.toString()).fontColor(Color.Red).offset({ x: -8 }).fontWeight(FontWeight.Medium)
-              Text("/" + this.totalCount).offset({ x: 6 }).fontWeight(FontWeight.Medium)
-            }.alignSelf(ItemAlign.Center)
-          }.margin(10)
-        }
-        .alignSelf(ItemAlign.Center)
-        .backgroundColor(Color.White)
-        .borderRadius(20)
+        Text("BBB")
+          .backgroundColor(Color.Brown)
+          .flexGrow(3)
       }
-      .width('90%')
-      .height('20%')
-      .justifyContent(FlexAlign.SpaceBetween)
-      .alignItems(HorizontalAlign.Start)
-    }
-    .width('100%')
-    .height('100%')
-    .backgroundColor("#eee")
-  }
+      .width(200)
+      .height(100)
+      .backgroundColor(Color.Blue)
 
-  getUpdateTimeStr(updateTime: Date): string {
-    return "" + updateTime.getFullYear()
-    + "/" + (updateTime.getMonth() + 1)
-    + "/" + updateTime.getDate() + " " + updateTime.getHours()
-    + ":" + updateTime.getMinutes()
-    + ":" + updateTime.getSeconds();
+
+      Slider()
+      // 当父容器是Row时，子组件1宽度是100%，在 子组件2有宽度时，子组件1设置flexGrow(1)会无视 子组件2，直接撑满父容器宽度，子组件2就会溢出
+      // 上述情况，可以该用layoutWeight(1) 解决
+      // 也可以将父容器换成Flex组件来解决，(子组件1设置flexGrow(1)拉升时，才会考虑子组件2的宽度)
+      Row() {
+        Text("AAA")
+          .backgroundColor(Color.Red)
+          .width("100%")
+          .flexGrow(1)
+          // .layoutWeight(1)
+
+        Text("BBB")
+          .backgroundColor(Color.Brown)
+      }
+      .width(200)
+      .height(100)
+      .backgroundColor(Color.Blue)
+
+
+      Slider()
+
+      Column() {
+        Row(){
+          Text("BBB")
+          Text("AAA")
+        }
+        .width('100%')
+        // .margin({left:20, right:50})
+        .backgroundColor(Color.Orange)
+
+
+        Row(){
+          Text("DDD")
+        }
+        .layoutWeight(1)
+        .backgroundColor(Color.Pink)
+      }
+      .width(300)
+      .height(100)
+      .padding(20)
+      .backgroundColor(Color.Blue)
+      .justifyContent(FlexAlign.Center)
+    }
+    .backgroundColor(Color.Gray)
   }
 }
+
+

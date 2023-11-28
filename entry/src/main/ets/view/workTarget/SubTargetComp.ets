@@ -19,12 +19,11 @@ export default struct SubTargetComp {
   // ui
   build() {
     Column() {
-      // 子目标
+      // 子目标10%
       Row() {
         Text("子目标")
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
-          .margin({ top: 10, bottom: 10, left: 12 })
 
         Row() {
           if (!this.isEditStatus) {
@@ -51,11 +50,11 @@ export default struct SubTargetComp {
         }
       }
       .width('100%')
-      .height('10%')
       .justifyContent(FlexAlign.SpaceBetween)
       .alignItems(VerticalAlign.Center)
+      .margin({ top: 20, bottom: 10, left: 12, right:20})
 
-      // 列表
+      // 列表90%
       Row() {
         Column() {
           List() {
@@ -72,13 +71,14 @@ export default struct SubTargetComp {
           .width('100%')
           .height('100%')
           .divider({ strokeWidth: 10 })
-          .scrollBar(BarState.Auto)
         }
+        .height('90%')
       }
+      .layoutWeight(1)
+      // .height('100%')
     }
-    // .backgroundColor(Color.Green)
-    .width('90%')
-    .margin({top: 40}) // TODO ??? 为啥
+    .height('100%')
+    .width('100%')
     .justifyContent(FlexAlign.Center)
   }
 }

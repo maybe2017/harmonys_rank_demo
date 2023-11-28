@@ -21,14 +21,9 @@ export default struct SubTargetItemComp {
   aboutToAppear() {
     this.currentData = JSON.parse(this.currentDataJson);
     console.log("===>> SubTargetItemComp ===> " + JSON.stringify(this.currentData))
-
-    console.log("===>> 打印对象属性值 ===> " + this.currentData.updateTime)
-    console.log("===>> 正常时间对象 ===> " + new Date("2023-11-27 16:30:30"))
-    console.log("===>> 正常时间对象解析为字符串 ===> " + this.getUpdateTimeStr(new Date("2023-11-27 16:30:30")))
-    console.log("===>> 先转json，再从json反序列化后的时间对象，解析字符串异常 ===> " + this.getUpdateTimeStr(this.currentData.updateTime))
     if (this.currentData === null || this.currentData === undefined) {
       console.log("接受到的currentDataJson为空！设置默认测试数据...")
-      this.currentData = new SubTargetItemData("0", "目标一", "33%", new Date("2023-11-26 15:20:03"));
+      this.currentData = new SubTargetItemData("0", "目标一", "33%", "2023-11-26 15:20:03");
     }
   }
 
@@ -47,12 +42,10 @@ export default struct SubTargetItemComp {
             .fontWeight(FontWeight.Medium)
         }
         .width('100%')
-        // TODO
-        // .flexGrow(1)
         .justifyContent(FlexAlign.SpaceBetween)
 
         Row() {
-          Text("更新时间: " + this.getUpdateTimeStr(new Date()))
+          Text("更新时间: " + this.getUpdateTimeStr(new Date(this.currentData.updateTimeStr)))
             .fontSize(12)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.Gray)
@@ -82,6 +75,8 @@ export default struct SubTargetItemComp {
           }
         }
       }
+      // .flexGrow(1)
+      .layoutWeight(1)
 
       // TODO &&
       if (this.currentClickIndex === -1) {
@@ -91,7 +86,6 @@ export default struct SubTargetItemComp {
           })
         }
         .alignSelf(ItemAlign.End)
-        .margin({ left: -10 })
       }
     }
     .width('100%')

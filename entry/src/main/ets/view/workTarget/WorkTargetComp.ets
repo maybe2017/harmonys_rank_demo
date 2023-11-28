@@ -6,7 +6,7 @@ export default struct WorkTargetComponent {
 
   // ui
   build() {
-    Column({ space: 20 }) {
+    Column() {
       Text("工作目标")
         .fontSize(20)
         .fontWeight(FontWeight.Bold)
@@ -54,8 +54,6 @@ export default struct WorkTargetComponent {
       .backgroundColor(Color.White)
       .borderRadius(20)
     }
-    .width('90%')
-    .height('22%')
     .justifyContent(FlexAlign.SpaceAround)
     .alignItems(HorizontalAlign.Start)
   }
