@@ -16,18 +16,23 @@ export default struct WorkTargetComponent {
           Image($r('app.media.icon'))
             .height(80)
             .width(80)
-            .margin(10)
           Column({ space: 7 }) {
             Text("第一季度运营目标")
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
+              // .alignSelf(ItemAlign.Start)
             Text("实现用户量与用户活跃度提升。")
               .fontSize(15)
               .fontColor(Color.Gray)
               .fontWeight(FontWeight.Medium)
               .opacity(0.5)
-          }.alignItems(HorizontalAlign.Start)
+          }
+          .margin({left: 10})
+          // 控制列组件里面 所有子组件不要默认的水平居中，从左到右依次排列
+          .alignItems(HorizontalAlign.Start)
         }
+        // 这里不设置的话 列中的子组件均默认是水平居中
+        .alignSelf(ItemAlign.Start)
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
           Column({ space: 5 }) {
@@ -41,20 +46,20 @@ export default struct WorkTargetComponent {
               .opacity(0.5)
           }.alignItems(HorizontalAlign.Start)
 
-
           Stack() {
-            Image($r('app.media.loading')).width(40)
+            Progress({value:this.completedCount, total:this.totalCount, type:ProgressType.Ring})
+              .width(50)
+              .color(Color.Blue)
             Text(this.completedCount.toString()).fontColor(Color.Red).offset({ x: -8 }).fontWeight(FontWeight.Medium)
             Text("/" + this.totalCount).offset({ x: 6 }).fontWeight(FontWeight.Medium)
           }.alignSelf(ItemAlign.Center)
         }
-        .margin(10)
+        .margin({ top: 10})
       }
-      .alignSelf(ItemAlign.Center)
       .backgroundColor(Color.White)
       .borderRadius(20)
+      .padding(10)
     }
-    .justifyContent(FlexAlign.SpaceAround)
     .alignItems(HorizontalAlign.Start)
   }
 

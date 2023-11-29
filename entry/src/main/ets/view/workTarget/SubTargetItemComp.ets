@@ -1,43 +1,42 @@
 import { SubTargetItemData } from '../../viewmodel/workTarget/SubTargetItemData';
+import { CHOOSE_ALL_GROUP_KEY } from '../../common/ConstantsForWorkTarget'
 
 @Component
 export default struct SubTargetItemComp {
-  // 是否是编辑状态
-  isEditStatus: boolean = false;
-  // 是否是选中状态
-  @State isChooseStatus: boolean = false;
 
-
-  // 本身的索引
+  // 子项本身的索引
   selfIndex: number;
-  // 当前点击索引
-  @Link currentClickIndex: number;
 
+  // 是否是全局编辑状态
+  @Link isEditStatus: boolean;
+
+  // 当前展开状态子项索引(只能有一个)
+  @Link currentSubItemExpandIndex: number;
 
   // 数据对象
   currentDataJson: string;
-  currentData: SubTargetItemData;
+  @State currentData: SubTargetItemData = new SubTargetItemData("0", "初始化子项", 0, "2023-11-26 00:20:03");
 
   aboutToAppear() {
     this.currentData = JSON.parse(this.currentDataJson);
     console.log("===>> SubTargetItemComp ===> " + JSON.stringify(this.currentData))
     if (this.currentData === null || this.currentData === undefined) {
       console.log("接受到的currentDataJson为空！设置默认测试数据...")
-      this.currentData = new SubTargetItemData("0", "目标一", "33%", "2023-11-26 15:20:03");
+      this.currentData = new SubTargetItemData("0", "初始化子项", 0, "2023-11-26 00:20:03");
     }
   }
 
 
   // ui
   build() {
-    Row(){
+    Row() {
       Column() {
         Row() {
           Text(`${this.currentData.subTitle}`)
             .fontSize(16)
             .fontWeight(FontWeight.Bold)
 
-          Text(`${this.currentData.progress}`)
+          Text(`${this.currentData.progress}%`)
             .fontSize(16)
             .fontWeight(FontWeight.Medium)
         }
@@ -54,36 +53,43 @@ export default struct SubTargetItemComp {
         .alignSelf(ItemAlign.End)
         .margin({ top: 10 })
 
-        if (this.selfIndex === this.currentClickIndex) {
+        // 子项索引与点击索引相等时，子项展开
+        if (this.selfIndex === this.currentSubItemExpandIndex) {
           Column() {
             Blank()
-            Progress({ value: 33, total: 100, type: ProgressType.Capsule })
-              .color(Color.Blue)
-              .value(Number.parseInt(`${this.currentData.progress}`))
-              .width(280)
-              .height(20)
-              .margin({ top: 20, bottom: 10 })
+            Slider({ value: Number.parseInt(`${this.currentData.progress}`) })
+              .showTips(true)
+              .blockColor(Color.Blue)
+              .selectedColor(Color.Blue)
+              .trackColor(Color.Gray)
+              .onChange((value: number, mode: SliderChangeMode) => {
+                this.currentData.progress = Number.parseInt(value.toFixed(0))
+              })
 
             Row() {
-              Text("取消").editAndCancelStyle().onClick(()=>{this.currentClickIndex=-1})
-              Text("确定").editAndCancelStyle().onClick(()=>{this.currentClickIndex=-1})
+              Text("取消").editAndCancelStyle().onClick(() => {
+                animateTo({duration:500}, ()=>{
+                  this.currentSubItemExpandIndex = -1
+                })
+              })
+              Text("确定").editAndCancelStyle().onClick(() => {
+                animateTo({duration:500}, ()=>{
+                  this.currentSubItemExpandIndex = -1
+                })
+              })
             }
             .width("100%")
             .justifyContent(FlexAlign.SpaceAround)
-            // TODO 不生效？
-            .animation({duration:2000})
           }
+          .transition({ type: TransitionType.Insert, translate: { x: -40, y: 0 }, opacity: 0 })
+          .transition({ type: TransitionType.Delete, translate: { x: 40, y: 0 }, opacity: 0 })
         }
       }
-      // .flexGrow(1)
       .layoutWeight(1)
 
-      // TODO &&
-      if (this.currentClickIndex === -1) {
-        Row(){
-          Checkbox().onChange((choose) => {
-            this.isChooseStatus = choose;
-          })
+      if (this.currentSubItemExpandIndex === -1 && this.isEditStatus) {
+        Row() {
+          Checkbox({ group: CHOOSE_ALL_GROUP_KEY })
         }
         .alignSelf(ItemAlign.End)
       }
