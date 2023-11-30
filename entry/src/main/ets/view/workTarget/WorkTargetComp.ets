@@ -1,8 +1,10 @@
+import { CommonUntil } from '../../viewmodel/workTarget/SubTargetItemData';
+
 @Component
 export default struct WorkTargetComponent {
   completedCount: number = 0;
   totalCount: number = 0;
-  updateTime: Date = new Date("2023-11-27 16:30:30")
+  lastUpdateTimeStr: string = ""
 
   // ui
   build() {
@@ -39,7 +41,7 @@ export default struct WorkTargetComponent {
             Text("整体进度")
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
-            Text("更新时间: " + this.getUpdateTimeStr(this.updateTime))
+            Text("更新时间: " + CommonUntil.parse2ShowTimeStr(new Date(this.lastUpdateTimeStr)))
               .fontSize(15)
               .fontColor(Color.Gray)
               .fontWeight(FontWeight.Medium)
@@ -61,13 +63,5 @@ export default struct WorkTargetComponent {
       .padding(10)
     }
     .alignItems(HorizontalAlign.Start)
-  }
-
-  getUpdateTimeStr(updateTime: Date): string {
-    return "" + updateTime.getFullYear()
-    + "/" + (updateTime.getMonth() + 1)
-    + "/" + updateTime.getDate() + " " + updateTime.getHours()
-    + ":" + updateTime.getMinutes()
-    + ":" + updateTime.getSeconds();
   }
 }

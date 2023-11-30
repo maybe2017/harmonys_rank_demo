@@ -1,4 +1,4 @@
-import { SubTargetItemData } from '../../viewmodel/workTarget/SubTargetItemData';
+import { CommonUntil, SubTargetItemData } from '../../viewmodel/workTarget/SubTargetItemData';
 import { CHOOSE_ALL_GROUP_KEY } from '../../common/ConstantsForWorkTarget'
 
 @Component
@@ -44,7 +44,7 @@ export default struct SubTargetItemComp {
         .justifyContent(FlexAlign.SpaceBetween)
 
         Row() {
-          Text("更新时间: " + this.getUpdateTimeStr(new Date(this.currentData.updateTimeStr)))
+          Text("更新时间: " + CommonUntil.parse2ShowTimeStr(new Date(this.currentData.updateTimeStr)))
             .fontSize(12)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.Gray)
@@ -89,7 +89,7 @@ export default struct SubTargetItemComp {
 
       if (this.currentSubItemExpandIndex === -1 && this.isEditStatus) {
         Row() {
-          Checkbox({ group: CHOOSE_ALL_GROUP_KEY })
+          Checkbox({ name: this.currentData.subId, group: CHOOSE_ALL_GROUP_KEY })
         }
         .alignSelf(ItemAlign.End)
       }
@@ -98,14 +98,6 @@ export default struct SubTargetItemComp {
     .backgroundColor(Color.White)
     .borderRadius(20)
     .padding(10)
-  }
-
-  getUpdateTimeStr(updateTime: Date): string {
-    return "" + updateTime.getFullYear()
-    + "/" + (updateTime.getMonth() + 1)
-    + "/" + updateTime.getDate() + " " + updateTime.getHours()
-    + ":" + updateTime.getMinutes()
-    + ":" + updateTime.getSeconds();
   }
 }
 
