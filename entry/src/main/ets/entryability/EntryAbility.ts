@@ -17,7 +17,7 @@ export default class EntryAbility extends UIAbility {
 
     // 注意此处 与路由处 main_pages.json 都得改
     // windowStage.loadContent('pages/RankPageComponent', (err, data) => {
-    windowStage.loadContent('pages/Index', (err, data) => {
+    windowStage.loadContent('pages/WorkTargetPage', (err, data) => {
       if (err.code) {
         hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;

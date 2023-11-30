@@ -2,9 +2,9 @@ import { CommonUntil } from '../../viewmodel/workTarget/SubTargetItemData';
 
 @Component
 export default struct WorkTargetComponent {
-  completedCount: number = 0;
-  totalCount: number = 0;
-  lastUpdateTimeStr: string = ""
+  @Prop completedCount: number
+  @Prop totalCount: number
+  @Prop lastUpdateTimeStr: string
 
   // ui
   build() {
@@ -22,14 +22,14 @@ export default struct WorkTargetComponent {
             Text("第一季度运营目标")
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
-              // .alignSelf(ItemAlign.Start)
+            // .alignSelf(ItemAlign.Start)
             Text("实现用户量与用户活跃度提升。")
               .fontSize(15)
               .fontColor(Color.Gray)
               .fontWeight(FontWeight.Medium)
               .opacity(0.5)
           }
-          .margin({left: 10})
+          .margin({ left: 10 })
           // 控制列组件里面 所有子组件不要默认的水平居中，从左到右依次排列
           .alignItems(HorizontalAlign.Start)
         }
@@ -49,14 +49,14 @@ export default struct WorkTargetComponent {
           }.alignItems(HorizontalAlign.Start)
 
           Stack() {
-            Progress({value:this.completedCount, total:this.totalCount, type:ProgressType.Ring})
+            Progress({ value: this.completedCount, total: this.totalCount, type: ProgressType.Ring })
               .width(50)
               .color(Color.Blue)
             Text(this.completedCount.toString()).fontColor(Color.Red).offset({ x: -8 }).fontWeight(FontWeight.Medium)
             Text("/" + this.totalCount).offset({ x: 6 }).fontWeight(FontWeight.Medium)
           }.alignSelf(ItemAlign.Center)
         }
-        .margin({ top: 10})
+        .margin({ top: 10 })
       }
       .backgroundColor(Color.White)
       .borderRadius(20)
