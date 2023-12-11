@@ -14,8 +14,6 @@ export default struct SubTargetComp {
   @State isSubItemExpandStatus: boolean = false;
   // 列表数据集合(本组件内只读)
   @Link workTargetDataList: Array<SubTargetItemData>;
-  // 强制父组件刷新
-  @Link refreshParentComp: boolean;
 
   // 存放全选模式下选择的keys
   checkboxGroupKeyArray:Array<string> = [];
@@ -24,15 +22,15 @@ export default struct SubTargetComp {
   @State newItemInputValue:string = ""
   dialogController: CustomDialogController = new CustomDialogController({
     builder: CustomDialogExample({
-      refreshParentComp:$refreshParentComp,
+      inputValue:$newItemInputValue,
       confirm:()=> {
         console.log("新增目标项: %s", this.newItemInputValue)
-
+        if (this.newItemInputValue === "" || !this.newItemInputValue) {
+          return;
+        }
         let nextId = new Date().getMilliseconds();
-        let newTarget: SubTargetItemData = new SubTargetItemData(nextId.toString(), this.newItemInputValue, 0, CommonUntil.parse2ShowTimeStr(new Date));
+        let newTarget: SubTargetItemData = new SubTargetItemData(nextId.toString(), this.newItemInputValue, 0, CommonUntil.parse2ShowTimeStr(new Date()));
         CommonUntil.pushNewItem2Arr<SubTargetItemData>(newTarget, this.workTargetDataList)
-
-        // this.refreshParentComp = !this.refreshParentComp;
         promptAction.showToast({
           message: '新增成功',
           duration: 1500,
@@ -71,6 +69,9 @@ export default struct SubTargetComp {
             .margin({left:5})
             .onClick(()=>{
               if (this.dialogController != undefined) {
+                // 点击新增时，把编辑状态先清除掉
+                this.checkboxGroupKeyArray = [];
+                this.isEditStatus = false;
                 this.dialogController.open()
               }
             })
@@ -150,7 +151,7 @@ export default struct SubTargetComp {
                 })
               })
             }, (itemData, index) => {
-              return index.toString()
+              return JSON.stringify(itemData) + index;
             })
           }
           .width('100%')
@@ -195,8 +196,8 @@ export default struct SubTargetComp {
                   action: () => {
                     console.info('Callback when the second button is clicked')
                     this.workTargetDataList = CommonUntil.batchRemoveByKeyValues<SubTargetItemData>('subId', this.checkboxGroupKeyArray, this.workTargetDataList)
-                    // 异步？
-                    this.refreshParentComp = !this.refreshParentComp;
+                    this.checkboxGroupKeyArray = [];
+                    this.isEditStatus = false;
                     promptAction.showToast({
                       message: '删除成功',
                       duration: 1500,
@@ -229,14 +230,13 @@ export default struct SubTargetComp {
 // 增加项目时候的弹窗
 @CustomDialog
 struct CustomDialogExample {
-  @Link refreshParentComp: boolean;
+  @Link inputValue: string
   textValue: string
-  inputValue: string
 
   controller: CustomDialogController
-  cancel: () => void
+  cancel: () => void = () => {
+  }
   confirm: () => void = () => {
-
   }
 
   build() {

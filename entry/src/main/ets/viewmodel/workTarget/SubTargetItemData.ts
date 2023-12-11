@@ -29,27 +29,33 @@ class WorkTargetDataModel {
     // this.batchRemoveBySubIds(["7","8"])
   }
 
-  // public pushNewTargetData(subTitle: string): void {
-  //   let currentMaxId = Math.max.call(Math, this.testDataArr.map(i => {return i.subId}));
-  //   let nextId = Number.parseInt(currentMaxId) + 1;
-  //   let newTarget: SubTargetItemData = new SubTargetItemData(nextId.toString(), subTitle, 0, CommonUntil.parse2ShowTimeStr(new Date));
-  //   this.testDataArr.push(newTarget);
-  // }
-  //
-  // public batchRemoveBySubIds(subIds: Array<string>): void {
-  //   console.warn("删除动作subIds: %s, 删除前剩余元素个数: %d", JSON.stringify(subIds), this.testDataArr.length)
-  //   this.testDataArr = this.testDataArr.filter((i) => !subIds.includes(i.subId));
-  //   console.warn("删除后剩余元素个数: %d", this.testDataArr.length)
-  // }
-  //
-  // public getLastUpdateTime(): string {
-  //   let lastUpdateTimeStr: string = '';
-  //   for (let index = 0; index < this.testDataArr.length; index++) {
-  //     const element = this.testDataArr[index];
-  //     lastUpdateTimeStr = lastUpdateTimeStr > element.updateTimeStr ? lastUpdateTimeStr : element.updateTimeStr;
-  //   }
-  //   return lastUpdateTimeStr;
-  // }
+  public pushNewTargetData(subTitle: string): void {
+    // let currentMaxId = Math.max.call(Math, this.testDataArr.map(i => {return i.subId}));
+    // let nextId = Number.parseInt(currentMaxId) + 1;
+    let nextId = new Date().getMilliseconds();
+    let newTarget: SubTargetItemData = new SubTargetItemData(nextId.toString(), subTitle, 0, CommonUntil.parse2ShowTimeStr(new Date));
+    this.testDataArr.push(newTarget);
+  }
+
+  public batchRemoveBySubIds(subIds: Array<string>): void {
+    console.warn("删除动作subIds: %s, 删除前剩余元素个数: %d", JSON.stringify(subIds), this.testDataArr.length)
+    this.testDataArr = this.testDataArr.filter((i) => !subIds.includes(i.subId));
+    console.warn("删除后剩余元素个数: %d", this.testDataArr.length)
+  }
+
+  // splice此方法会改变原数组
+  public updateItemByIndex(itemIndexInArr: number, newItem: SubTargetItemData): void {
+    this.testDataArr.splice(itemIndexInArr, 1, newItem)
+  }
+
+  public getLastUpdateTime(): string {
+    let lastUpdateTimeStr: string = '';
+    for (let index = 0; index < this.testDataArr.length; index++) {
+      const element = this.testDataArr[index];
+      lastUpdateTimeStr = lastUpdateTimeStr > element.updateTimeStr ? lastUpdateTimeStr : element.updateTimeStr;
+    }
+    return lastUpdateTimeStr;
+  }
 }
 
 export class CommonUntil {
@@ -61,15 +67,25 @@ export class CommonUntil {
     + ":" + updateTime.getSeconds();
   }
 
+  // 数组的push方法会改变原始数组
   public static pushNewItem2Arr<T>(newItem: T, originArr:Array<T>): Array<T> {
     originArr.push(newItem);
     return originArr;
   }
 
+  // 但是数组的filter方法却 不会 改变原始数组
   public static batchRemoveByKeyValues<T>(key: string, keyValues: Array<string>, originArr:Array<T>): Array<T>  {
     console.warn("删除动作[key: %s, values: %s], 删除前剩余元素个数: %d", JSON.stringify(key), JSON.stringify(keyValues), originArr.length)
-    originArr = originArr.filter((i) => !keyValues.includes(i[key]));
+    let newArr:Array<T> = originArr.filter((i) => !keyValues.includes(i[key]));
     console.warn("删除后剩余元素个数: %d", originArr.length)
+    console.warn("删除后originArr: %s", JSON.stringify(originArr))
+    console.warn("删除后newArr: %s", JSON.stringify(newArr))
+    return newArr;
+  }
+
+  // splice此方法会改变原数组
+  public static updateItemById<T>(itemIndexInArr: number, newItem: T, originArr:Array<T>): Array<T> {
+    originArr.splice(itemIndexInArr, 1, newItem)
     return originArr;
   }
 

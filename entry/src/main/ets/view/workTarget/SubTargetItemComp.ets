@@ -1,4 +1,4 @@
-import { CommonUntil, SubTargetItemData } from '../../viewmodel/workTarget/SubTargetItemData';
+import WorkTargetDataModel, { CommonUntil, SubTargetItemData} from '../../viewmodel/workTarget/SubTargetItemData';
 import { CHOOSE_ALL_GROUP_KEY } from '../../common/ConstantsForWorkTarget'
 
 @Component
@@ -6,14 +6,17 @@ export default struct SubTargetItemComp {
 
   // 子项本身的索引
   selfIndex: number;
+  // 当前被展开项的进度拖动值
+  currentExpandItemSliderProcess: number;
 
   // 是否是全局编辑状态
   @Link isEditStatus: boolean;
-
   // 当前展开状态子项索引(只能有一个)
   @Link currentSubItemExpandIndex: number;
+  // 强制顶层组件刷新(子目标项达到100% -> 通知顶层组件重新计算整体进度)
+  @Consume refreshOverallProgress: boolean;
 
-  // 数据对象
+  // 数据对象(此处用json接收，也可以直接采用传对象方式)
   currentDataJson: string;
   @State currentData: SubTargetItemData = new SubTargetItemData("0", "初始化子项", 0, "2023-11-26 00:20:03");
 
@@ -63,18 +66,40 @@ export default struct SubTargetItemComp {
               .selectedColor(Color.Blue)
               .trackColor(Color.Gray)
               .onChange((value: number, mode: SliderChangeMode) => {
-                this.currentData.progress = Number.parseInt(value.toFixed(0))
+                if (this.currentData.progress != Number.parseInt(value.toFixed(0))) {
+                  this.currentExpandItemSliderProcess = Number.parseInt(value.toFixed(0));
+                }
               })
 
             Row() {
               Text("取消").editAndCancelStyle().onClick(() => {
-                animateTo({duration:500}, ()=>{
+                animateTo({ duration: 500 }, () => {
                   this.currentSubItemExpandIndex = -1
+                  this.currentExpandItemSliderProcess = undefined;
                 })
               })
               Text("确定").editAndCancelStyle().onClick(() => {
-                animateTo({duration:500}, ()=>{
+                animateTo({ duration: 500 }, () => {
+                  if (this.currentExpandItemSliderProcess || this.currentExpandItemSliderProcess === 0) {
+
+                    let beforeProgress = this.currentData.progress;
+
+                    this.currentData.progress = this.currentExpandItemSliderProcess
+                    this.currentData.updateTimeStr = CommonUntil.parse2ShowTimeStr(new Date())
+                    WorkTargetDataModel.updateItemByIndex(this.selfIndex, this.currentData)
+
+                    // TODO 奇怪，状态变量的改变 要放在数据的变化之后，不然没效果？？
+                    // 原来是100 现在小于100
+                    if (beforeProgress === 100 && this.currentExpandItemSliderProcess < 100) {
+                      this.refreshOverallProgress = !this.refreshOverallProgress;
+                    }
+                    // 原来不是100 现在变为100
+                    if (this.currentExpandItemSliderProcess === 100) {
+                      this.refreshOverallProgress = !this.refreshOverallProgress;
+                    }
+                  }
                   this.currentSubItemExpandIndex = -1
+                  this.currentExpandItemSliderProcess = undefined;
                 })
               })
             }

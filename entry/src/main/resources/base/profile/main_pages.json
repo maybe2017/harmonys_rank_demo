@@ -1,8 +1,8 @@
 {
   "src": [
+    "pages/WorkTargetPage",
     "pages/Index",
     "pages/RankPageComponent",
-    "pages/TOTOList",
-    "pages/WorkTargetPage"
+    "pages/TOTOList"
   ]
 }
