@@ -11,10 +11,13 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
+    // 为使应用能够正常使用UIAbility 需声明UIAbility的名称、入口、标签等相关信息
     "abilities": [
       {
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ts",
+        // singleton启动模式 UIAbility配置为单实例模式
+        "launchType": "singleton",
         "description": "$string:entryAbility_desc",
         "icon": "$media:icon",
         "label": "$string:entryAbility_label",

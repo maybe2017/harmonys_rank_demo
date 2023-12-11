@@ -1,3 +1,6 @@
+// OpenHarmony 应用/服务支持通过 npm 来安装、共享、分发代码，管理工程的依赖关系。
+// OpenHarmony npm 包规范是在标准 npm规范 的基础上，增加对 OpenHarmony 平台的拓展
+// `buildTool:xx`标识 OpenHarmony npm 包的构建工具是 hvigor
 {
   "name": "myapplication",
   "version": "1.0.0",

@@ -1,3 +1,7 @@
+// app下多个model(HAP)共有的各类资源或文件
+// 配置应用全局描述信息，例如应用包名、版本号、应用图标、应用名称和依赖的SDK版本号等
+// HAP(Module和HAP一一对应)中的module.json由开发视图中的app.json5和module.json5合成
+// 所有的HAP最终会编译到一个App Pack中（以.app为后缀的包文件），用于发布到应用市场
 {
   "app": {
     "bundleName": "com.mayu.test",

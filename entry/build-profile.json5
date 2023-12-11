@@ -1,7 +1,11 @@
+// 模块级别的配置
 {
   "apiType": 'stageMode',
+  // 编译相关的配置 如编译器的选择、编译参数的设置
   "buildOption": {
   },
+
+  // 模块对应的产物配置
   "targets": [
     {
       "name": "default",

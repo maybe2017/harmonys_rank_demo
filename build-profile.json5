@@ -1,22 +1,35 @@
+// 工程级别的配置
 {
   "app": {
+    // 工程的签名信息，可包含多个签名信息
     "signingConfigs": [],
+    // 服务编译时的SDK版本
     "compileSdkVersion": 9,
+    // 服务兼容的最低SDK版本
     "compatibleSdkVersion": 9,
+    // 定义构建的产品品类，如通用默认版、付费版、免费版等
     "products": [
       {
+        // 定义产品的名称，由开发者自定义
         "name": "default",
+        // 指定当前产品品类对应的签名信息，签名信息需要在signingConfigs中进行定义
         "signingConfig": "default",
       }
     ]
   },
+
+  // 模块配置
   "modules": [
     {
       "name": "entry",
+      // 标明src目录相对工程根目录的相对路径
       "srcPath": "./entry",
+      // 定义构建的产物，由product和各模块定义的targets共同定义
       "targets": [
         {
+          // target名称，由各个模块的build-profile.json5中的targets字段定义
           "name": "default",
+          // 产品品类名称，由products字段进行定义
           "applyToProducts": [
             "default"
           ]
