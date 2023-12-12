@@ -5,8 +5,6 @@ export interface ITitleAndNote {
   noteItemSpace?: number;
 }
 
-
-
 // text组件样式参数约束
 export interface ITextStyle {
   fs?: number
@@ -18,4 +16,11 @@ export interface ITextStyle {
   .fontSize(textStyle?.fs)
   .fontColor(textStyle?.fc)
   .fontWeight(textStyle?.fw ? textStyle.fw : FontWeight.Medium)
+}
+
+
+// 用户信息界面ui元素数据类型
+export interface UserProfileUIDataInterface {
+  title: string,
+  img: string
 }
