@@ -54,75 +54,79 @@ export default struct SubTargetComp {
     this.dialogController = undefined
   }
 
+  // 子目标
+  @Builder SubTargetTitleAndEdit() {
+    Row() {
+      Row() {
+        Text("子目标")
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+        Image($r('app.media.ic_public_add_norm'))
+          .width(22)
+          .margin({left:5})
+          .onClick(()=>{
+            if (this.dialogController != undefined) {
+              // 点击新增时，把编辑状态先清除掉
+              this.checkboxGroupKeyArray = [];
+              this.isEditStatus = false;
+              this.dialogController.open()
+            }
+          })
+      }
+
+      // TODO 为啥点编辑后 高度会多一丢丢出来？
+      Row() {
+        if (!this.isEditStatus) {
+          Text("编辑")
+            .editAndCancelStyle()
+            .transition({type: TransitionType.Insert, translate: { x: -20, y: 0}, opacity:0})
+            .onClick(()=>{
+              // 指定动画参数
+              animateTo({duration:500}, ()=>{
+                this.isSubItemExpandStatus = false;
+                this.currentSubItemExpandIndex = -1;
+                this.isEditStatus = true
+              })
+            })
+        } else {
+          Row(){
+            Text("取消")
+              .editAndCancelStyle()
+              .margin({ right: 15 })
+              .onClick(()=>{
+                // 指定动画参数
+                animateTo({duration:500}, ()=>{
+                  this.isEditStatus = false
+                })
+              })
+
+            Text("全选")
+              .editAndCancelStyle()
+            CheckboxGroup({group:CHOOSE_ALL_GROUP_KEY}).onChange((checkboxGroupResult) => {
+              this.checkboxGroupKeyArray = checkboxGroupResult.name;
+              console.log("本次全选的选择状态: {}", checkboxGroupResult.status)
+            })
+          }
+          .transition({type: TransitionType.Insert, translate: { x: 20, y: 0}, opacity:0})
+          // .transition({type: TransitionType.Delete, scale: { x: 5, y: 5}, opacity:1})
+          // TODO 样式加在这里为啥效果不一样？
+        }
+      }
+      // 指定动画的样式
+      // .transition({type: TransitionType.All, scale: { x: 500, y: 500 }, opacity:1})
+      .margin({right:10})
+    }
+    .width('100%')
+    .justifyContent(FlexAlign.SpaceBetween)
+    .padding({ left:8})
+    .margin({ top: 15, bottom: 15})
+  }
 
   // ui
   build() {
     Column() {
       // 子目标
-      Row() {
-        Row() {
-          Text("子目标")
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-          Image($r('app.media.ic_public_add_norm'))
-            .width(22)
-            .margin({left:5})
-            .onClick(()=>{
-              if (this.dialogController != undefined) {
-                // 点击新增时，把编辑状态先清除掉
-                this.checkboxGroupKeyArray = [];
-                this.isEditStatus = false;
-                this.dialogController.open()
-              }
-            })
-        }
-
-        // TODO 为啥点编辑后 高度会多一丢丢出来？
-        Row() {
-          if (!this.isEditStatus) {
-            Text("编辑")
-              .editAndCancelStyle()
-              .transition({type: TransitionType.Insert, translate: { x: -20, y: 0}, opacity:0})
-              .onClick(()=>{
-                // 指定动画参数
-                animateTo({duration:500}, ()=>{
-                  this.isSubItemExpandStatus = false;
-                  this.currentSubItemExpandIndex = -1;
-                  this.isEditStatus = true
-                })
-              })
-          } else {
-            Row(){
-              Text("取消")
-                .editAndCancelStyle()
-                .margin({ right: 15 })
-                .onClick(()=>{
-                  // 指定动画参数
-                  animateTo({duration:500}, ()=>{
-                    this.isEditStatus = false
-                  })
-                })
-
-              Text("全选")
-                .editAndCancelStyle()
-              CheckboxGroup({group:CHOOSE_ALL_GROUP_KEY}).onChange((checkboxGroupResult) => {
-                this.checkboxGroupKeyArray = checkboxGroupResult.name;
-                console.log("本次全选的选择状态: {}", checkboxGroupResult.status)
-              })
-            }
-            .transition({type: TransitionType.Insert, translate: { x: 20, y: 0}, opacity:0})
-            // .transition({type: TransitionType.Delete, scale: { x: 5, y: 5}, opacity:1})
-            // TODO 样式加在这里为啥效果不一样？
-          }
-        }
-        // 指定动画的样式
-        // .transition({type: TransitionType.All, scale: { x: 500, y: 500 }, opacity:1})
-        .margin({right:10})
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.SpaceBetween)
-      .padding({ left:8})
-      .margin({ top: 15, bottom: 15})
+      this.SubTargetTitleAndEdit()
 
       // 列表
       Row() {
